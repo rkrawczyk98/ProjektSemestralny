@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Ankiety>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Ankiety</h1>
+
+<table class="table table-bordered" style="width:100%; border-color:black">
+    <thead>
+        <tr>
+            <th style="padding:4px; border-color:black; border-width:2px">
+                Ankieta Nazwa
+            </th>
+            <th style="padding:4px; border-color:black; border-width:2px">
+                Display Order
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td width="50%" style="padding:4px; border-color:black; border-width:2px">
+                    @obj.Nazwa
+                </td>
+                <td width="30%" style="padding:4px; border-color:black; border-width:2px">
+                    @obj.DisplayOrder
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
