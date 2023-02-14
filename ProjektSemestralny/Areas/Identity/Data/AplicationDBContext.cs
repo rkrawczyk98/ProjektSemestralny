@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjektSemestralny.Areas.Identity.Data;
+using ProjektSemestralny.Models;
 
 namespace ProjektSemestralny.Areas.Identity.Data;
 
@@ -30,5 +31,7 @@ public class AplicationDBContext : IdentityDbContext<ApplicationUser>
             builder.Property(x => x.LastName).HasMaxLength(255);
         }
     }
+
+    public DbSet<ProjektSemestralny.Models.Survey> Survey { get; set; }
 
 }
