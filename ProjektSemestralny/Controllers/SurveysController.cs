@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +36,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var survey = await _context.Survey
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (survey == null)
             {
                 return NotFound();
@@ -44,6 +46,7 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Surveys/Create
+        [Route("surveys/create")]
         public IActionResult Create()
         {
             return View();
@@ -54,8 +57,14 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Description")] Survey survey)
+        public async Task<IActionResult> Create([Bind("Title,Description")] Survey survey)
         {
+            // Wyciaganie identyfikatora aktualnie zalogowanego użytkownika z bazy
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            survey.AuthorId = claims.Value;
+
             if (ModelState.IsValid)
             {
                 _context.Add(survey);
@@ -88,7 +97,7 @@ namespace ProjektSemestralny.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description")] Survey survey)
         {
-            if (id != survey.ID)
+            if (id != survey.Id)
             {
                 return NotFound();
             }
@@ -102,7 +111,7 @@ namespace ProjektSemestralny.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SurveyExists(survey.ID))
+                    if (!SurveyExists(survey.Id))
                     {
                         return NotFound();
                     }
@@ -125,7 +134,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var survey = await _context.Survey
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (survey == null)
             {
                 return NotFound();
@@ -155,7 +164,8 @@ namespace ProjektSemestralny.Controllers
 
         private bool SurveyExists(int id)
         {
-          return _context.Survey.Any(e => e.ID == id);
+          return _context.Survey.Any(e => e.Id == id);
         }
+
     }
 }
