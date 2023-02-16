@@ -12,7 +12,7 @@ using ProjektSemestralny.Areas.Identity.Data;
 namespace ProjektSemestralny.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20230216121404_Initial")]
+    [Migration("20230216173646_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -306,32 +306,26 @@ namespace ProjektSemestralny.Migrations
 
             modelBuilder.Entity("ProjektSemestralny.Models.Survey", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
@@ -421,17 +415,9 @@ namespace ProjektSemestralny.Migrations
 
             modelBuilder.Entity("ProjektSemestralny.Models.Survey", b =>
                 {
-                    b.HasOne("ProjektSemestralny.Areas.Identity.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("ProjektSemestralny.Models.Category", "Category")
                         .WithMany("Surveys")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });

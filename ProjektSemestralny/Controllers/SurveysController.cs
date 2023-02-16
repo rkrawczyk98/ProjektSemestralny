@@ -46,26 +46,28 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Surveys/Create
+        [HttpGet]
         [Route("surveys/create")]
         public IActionResult Create()
         {
-            return View();
+            return View(); 
         }
 
         // POST: Surveys/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("surveys/create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description")] Survey survey)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Survey survey)
         {
             // Wyciaganie identyfikatora aktualnie zalogowanego użytkownika z bazy
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            survey.AuthorId = claims.Value;
+            if(claims != null) survey.AuthorId = claims.Value.ToString();
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
                 _context.Add(survey);
                 await _context.SaveChangesAsync();

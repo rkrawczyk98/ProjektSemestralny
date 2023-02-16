@@ -13,14 +13,14 @@ namespace ProjektSemestralny.Models
         
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public List<Survey_Question> Surveys_Questions { get; set; }
+        public List<Survey_Question>? Surveys_Questions { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
-        public string AuthorId { get; set; }
+        public string? AuthorId { get; set; }
     }
 }
