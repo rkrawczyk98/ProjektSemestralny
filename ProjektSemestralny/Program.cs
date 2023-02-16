@@ -7,7 +7,7 @@ var connectionString = builder.Configuration.GetConnectionString("AplicationDBCo
 builder.Services.AddDbContext<AplicationDBContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AplicationDBContext>();
 
 // Add services to the container.
@@ -27,7 +27,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
 
 app.UseAuthorization();
 
