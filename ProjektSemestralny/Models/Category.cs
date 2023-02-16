@@ -9,9 +9,9 @@ namespace ProjektSemestralny.Models
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public List<Survey> Surveys { get; set; }
+        public List<Survey>? Surveys { get; set; }
 
     }
 }
