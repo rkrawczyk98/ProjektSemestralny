@@ -17,7 +17,6 @@ namespace ProjektSemestralny.Controllers
         {
             roleManager = roleMgr;
             userManager = userMrg;
-            //SeedData(userMrg, roleMgr);
         }
 
         //[Authorize(Roles = "Admin")]
@@ -127,76 +126,6 @@ namespace ProjektSemestralny.Controllers
                 return RedirectToAction(nameof(Index));
             else
                 return await Update(model.RoleId);
-        }
-
-        public void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            SeedRoles(roleManager);
-            SeedUsers(userManager);
-        }
-
-        public async void SeedUsers(UserManager<ApplicationUser> userManager)
-        {
-            if (userManager.FindByNameAsync("User").Result == null)
-            {
-                ApplicationUser user = new ApplicationUser();
-                user.FirstName = "User";
-                user.LastName = "User";
-                user.Email = "user1@user.eu";
-                user.UserName = user.Email;
-                user.EmailConfirmed = true;
-
-
-                IdentityResult result = userManager.CreateAsync(user, "User123!").Result;
-
-                await userManager.AddToRoleAsync(user, "Logged");
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Logged").Wait();
-                }
-            }
-
-
-            if (userManager.FindByNameAsync("Admin").Result == null)
-            {
-                ApplicationUser user = new ApplicationUser();
-                user.FirstName = "Admin";
-                user.LastName = "Admin";
-                user.Email = "admin@admin.eu";
-                user.UserName = user.Email;
-                user.EmailConfirmed = true;
-
-                IdentityResult result = userManager.CreateAsync(user, "Admin123!").Result;
-                await userManager.AddToRoleAsync(user, "Admin");
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Admin").Wait();
-                }
-            }
-        }
-
-        public void SeedRoles(RoleManager<IdentityRole> roleManager)
-        {
-            {
-                if (!RoleExists("Admin"))
-                {
-                    IdentityRole role = new IdentityRole();
-                    role.Name = "Admin";
-                    IdentityResult roleResult = roleManager.
-                    CreateAsync(role).Result;
-                }
-
-
-                if (!RoleExists("Logged"))
-                {
-                    IdentityRole role = new IdentityRole();
-                    role.Name = "Logged";
-                    IdentityResult roleResult = roleManager.
-                    CreateAsync(role).Result;
-                }
-            }
         }
 
     }

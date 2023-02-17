@@ -13,12 +13,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjektSemestralny.Areas.Identity.Data;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace ProjektSemestralny.Areas.Identity.Pages.Account
 {
@@ -131,6 +134,13 @@ namespace ProjektSemestralny.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+
+                ApplicationUser applicationUser = await _userManager.FindByNameAsync(user.UserName);
+                if (!await _userManager.IsInRoleAsync(applicationUser, "Logged"))
+                {
+                    var userResult = await _userManager.AddToRoleAsync(applicationUser, "Logged");
+                }
 
                 if (result.Succeeded)
                 {
