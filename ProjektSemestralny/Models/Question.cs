@@ -9,6 +9,6 @@ namespace ProjektSemestralny.Models
         public string Content { get; set; }
         public List<Answer> Answers { get; set; }
         public List<Survey_Question> Surveys_Questions { get; set; }
-
+        public enum Type { Closed, TF, Selected, Open, SemiOpen };
     }
 }

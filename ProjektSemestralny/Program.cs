@@ -38,9 +38,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-
-//RoleController roleController = new RoleController(roleManager, userMrg);
-
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
