@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Ankieta";
+}
+
+<h1>Ankiety</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>
+                    @obj.Id
+                </td>
+                <td>
+                    @obj.Name
+                </td>
+                <td>
+                    @obj.Description
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
