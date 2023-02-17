@@ -17,25 +17,10 @@ namespace ProjektSemestralny.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.13")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("AnswerQuestion", b =>
-                {
-                    b.Property<int>("AnswersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AnswersId", "QuestionsId");
-
-                    b.HasIndex("QuestionsId");
-
-                    b.ToTable("AnswerQuestion");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -255,11 +240,19 @@ namespace ProjektSemestralny.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answer");
                 });
@@ -273,7 +266,6 @@ namespace ProjektSemestralny.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -293,33 +285,10 @@ namespace ProjektSemestralny.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Question");
-                });
-
-            modelBuilder.Entity("ProjektSemestralny.Models.Survey", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -327,37 +296,7 @@ namespace ProjektSemestralny.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Survey");
-                });
-
-            modelBuilder.Entity("ProjektSemestralny.Models.Survey_Question", b =>
-                {
-                    b.Property<int>("SurveyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SurveyId", "QuestionId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Survey_Question");
-                });
-
-            modelBuilder.Entity("AnswerQuestion", b =>
-                {
-                    b.HasOne("ProjektSemestralny.Models.Answer", null)
-                        .WithMany()
-                        .HasForeignKey("AnswersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjektSemestralny.Models.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -411,47 +350,25 @@ namespace ProjektSemestralny.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjektSemestralny.Models.Survey", b =>
+            modelBuilder.Entity("ProjektSemestralny.Models.Answer", b =>
+                {
+                    b.HasOne("ProjektSemestralny.Models.Question", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId");
+                });
+
+            modelBuilder.Entity("ProjektSemestralny.Models.Question", b =>
                 {
                     b.HasOne("ProjektSemestralny.Models.Category", "Category")
-                        .WithMany("Surveys")
+                        .WithMany()
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ProjektSemestralny.Models.Survey_Question", b =>
-                {
-                    b.HasOne("ProjektSemestralny.Models.Question", "Question")
-                        .WithMany("Surveys_Questions")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjektSemestralny.Models.Survey", "Survey")
-                        .WithMany("Surveys_Questions")
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Survey");
-                });
-
-            modelBuilder.Entity("ProjektSemestralny.Models.Category", b =>
-                {
-                    b.Navigation("Surveys");
-                });
-
             modelBuilder.Entity("ProjektSemestralny.Models.Question", b =>
                 {
-                    b.Navigation("Surveys_Questions");
-                });
-
-            modelBuilder.Entity("ProjektSemestralny.Models.Survey", b =>
-                {
-                    b.Navigation("Surveys_Questions");
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

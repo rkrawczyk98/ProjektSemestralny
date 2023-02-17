@@ -17,17 +17,6 @@ public class AplicationDBContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Survey_Question>().HasKey(sq => new
-        {
-            sq.SurveyId,
-            sq.QuestionId
-        });
-
-        modelBuilder.Entity<Survey_Question>().HasOne(q => q.Question).WithMany(sq => sq.Surveys_Questions).HasForeignKey(q =>
-        q.QuestionId);
-
-        modelBuilder.Entity<Survey_Question>().HasOne(q => q.Survey).WithMany(sq => sq.Surveys_Questions).HasForeignKey(q =>
-        q.SurveyId);
 
         base.OnModelCreating(modelBuilder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -44,10 +33,6 @@ public class AplicationDBContext : IdentityDbContext<ApplicationUser>
             builder.Property(x => x.LastName).HasMaxLength(255);
         }
     }
-
-    public DbSet<ProjektSemestralny.Models.Survey> Survey { get; set; }
-
-    public DbSet<ProjektSemestralny.Models.Survey_Question> Survey_Question { get; set; }
     
     public DbSet<ProjektSemestralny.Models.Answer> Answer { get; set; }
 

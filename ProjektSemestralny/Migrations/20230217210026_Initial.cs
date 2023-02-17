@@ -10,19 +10,6 @@ namespace ProjektSemestralny.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Answer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answer", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -70,24 +57,11 @@ namespace ProjektSemestralny.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Question",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Question", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,78 +171,48 @@ namespace ProjektSemestralny.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Survey",
+                name: "Question",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true),
-                    AuthorId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Survey", x => x.Id);
+                    table.PrimaryKey("PK_Question", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Survey_Category_CategoryId",
+                        name: "FK_Question_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnswerQuestion",
+                name: "Answer",
                 columns: table => new
                 {
-                    AnswersId = table.Column<int>(type: "int", nullable: false),
-                    QuestionsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AuthorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnswerQuestion", x => new { x.AnswersId, x.QuestionsId });
+                    table.PrimaryKey("PK_Answer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AnswerQuestion_Answer_AnswersId",
-                        column: x => x.AnswersId,
-                        principalTable: "Answer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnswerQuestion_Question_QuestionsId",
-                        column: x => x.QuestionsId,
-                        principalTable: "Question",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Survey_Question",
-                columns: table => new
-                {
-                    SurveyId = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Survey_Question", x => new { x.SurveyId, x.QuestionId });
-                    table.ForeignKey(
-                        name: "FK_Survey_Question_Question_QuestionId",
+                        name: "FK_Answer_Question_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Question",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Survey_Question_Survey_SurveyId",
-                        column: x => x.SurveyId,
-                        principalTable: "Survey",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnswerQuestion_QuestionsId",
-                table: "AnswerQuestion",
-                column: "QuestionsId");
+                name: "IX_Answer_QuestionId",
+                table: "Answer",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -310,20 +254,15 @@ namespace ProjektSemestralny.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Survey_CategoryId",
-                table: "Survey",
+                name: "IX_Question_CategoryId",
+                table: "Question",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Survey_Question_QuestionId",
-                table: "Survey_Question",
-                column: "QuestionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AnswerQuestion");
+                name: "Answer");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -341,22 +280,13 @@ namespace ProjektSemestralny.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Survey_Question");
-
-            migrationBuilder.DropTable(
-                name: "Answer");
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Question");
-
-            migrationBuilder.DropTable(
-                name: "Survey");
 
             migrationBuilder.DropTable(
                 name: "Category");

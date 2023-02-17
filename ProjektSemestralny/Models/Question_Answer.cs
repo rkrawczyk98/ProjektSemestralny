@@ -1,13 +1,14 @@
 ﻿namespace ProjektSemestralny.Models
 {
-    public class Survey_Question
+    public class Question_Answer
     {
-        public int SurveyId { get; set; }
-
-        public Survey Survey { get; set; }
-
         public int QuestionId { get; set; }
 
         public Question Question { get; set; }
+
+        public int AnswerId { get; set; }
+
+        public Answer Answer { get; set; }
     }
 }
+
