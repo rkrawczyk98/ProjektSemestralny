@@ -12,7 +12,7 @@ using ProjektSemestralny.Areas.Identity.Data;
 namespace ProjektSemestralny.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20230217104746_Initial")]
+    [Migration("20230217154747_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,7 +189,6 @@ namespace ProjektSemestralny.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

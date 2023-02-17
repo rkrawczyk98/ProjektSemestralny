@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace ProjektSemestralny.Controllers
 {
     public class HomeController : Controller
-    {            
+    {
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -35,4 +35,73 @@ namespace ProjektSemestralny.Controllers
         }
 
     }
+
+    /*
+    public class MyIdentityDataInitializer
+    {
+        private RoleManager<IdentityRole> roleManager;
+        private UserManager<ApplicationUser> userManager;
+
+        public void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            SeedRoles(roleManager);
+            SeedUsers(userManager);
+        }
+
+        public void SeedUsers(UserManager<ApplicationUser> userManager)
+        {
+            if (userManager.FindByNameAsync("User").Result == null)
+            {
+                ApplicationUser user = new ApplicationUser();
+                user.UserName = "user";
+                user.Email = "user1@user.eu";
+
+                IdentityResult result = userManager.CreateAsync(user, "User123!").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "Logged").Wait();
+                }
+            }
+
+
+            if (userManager.FindByNameAsync("Admin").Result == null)
+            {
+                ApplicationUser user = new ApplicationUser();
+                user.UserName = "Admin";
+                user.Email = "admin@admin.eu";
+
+                IdentityResult result = userManager.CreateAsync(user, "Admin123!").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "Admin").Wait();
+                }
+            }
+        }
+
+        public void SeedRoles(RoleManager<IdentityRole> roleManager)
+        {
+            {
+                if (!roleManager.RoleExistsAsync("Admin").Result)
+                {
+                    IdentityRole role = new IdentityRole();
+                    role.Name = "Admin";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+                }
+
+
+                if (!roleManager.RoleExistsAsync("Logged").Result)
+                {
+                    IdentityRole role = new IdentityRole();
+                    role.Name = "Logged";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+                }
+            }
+        }
+    }
+        */
+    
 }
