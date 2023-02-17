@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using ProjektSemestralny.Areas.Identity.Data;
+using ProjektSemestralny.Areas.Identity.Pages.Account;
 using ProjektSemestralny.Models;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace ProjektSemestralny.Controllers
 {
     public class HomeController : Controller
-    {
+    {            
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -29,5 +33,6 @@ namespace ProjektSemestralny.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
