@@ -97,7 +97,7 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description")] Survey survey)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Survey survey)
         {
             if (id != survey.Id)
             {
