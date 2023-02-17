@@ -59,7 +59,7 @@ namespace ProjektSemestralny.Controllers
         [HttpPost]
         [Route("surveys/create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Survey survey)
+        public async Task<IActionResult> Create([Bind("Id,Question,Category")] Survey survey)
         {
             // Wyciaganie identyfikatora aktualnie zalogowanego użytkownika z bazy
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -97,7 +97,7 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description")] Survey survey)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Question,Category")] Survey survey)
         {
             if (id != survey.Id)
             {

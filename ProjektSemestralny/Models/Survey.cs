@@ -11,9 +11,7 @@ namespace ProjektSemestralny.Models
         [Key]
         public int Id { get; set; }
         
-        public string Title { get; set; }
-
-        public string? Description { get; set; }
+        public string Question { get; set; }
 
         public List<Survey_Question>? Surveys_Questions { get; set; }
 
@@ -22,5 +20,6 @@ namespace ProjektSemestralny.Models
         public Category? Category { get; set; }
 
         public string? AuthorId { get; set; }
+        public enum Type { Closed, TF, Selected, Open, SemiOpen };
     }
 }
