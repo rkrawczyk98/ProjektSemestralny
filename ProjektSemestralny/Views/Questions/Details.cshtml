@@ -17,7 +17,7 @@
             @Html.DisplayFor(model => model.Content)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category.Name)
+            @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Category.Name)
@@ -25,7 +25,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="AddAnswer" asp-route-id="@Model?.Id">Add answer</a> |
+    <a asp-controller="Answers" asp-action="Create" asp-route-QuestionId="@Model?.Id" class="btn btn-primary">Add answer</a> |
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

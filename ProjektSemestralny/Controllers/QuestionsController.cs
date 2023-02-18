@@ -14,16 +14,6 @@ namespace ProjektSemestralny.Controllers
     {
         private readonly AplicationDBContext _context;
 
-        private async Task<List<Category>> GetCategories()
-        {
-            return await _context.Category.Select(x => new Category()
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description
-            }).ToListAsync();
-        }
-
         public QuestionsController(AplicationDBContext context)
         {
             _context = context;
@@ -32,7 +22,8 @@ namespace ProjektSemestralny.Controllers
         // GET: Questions
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Question.ToListAsync());
+            var aplicationDBContext = _context.Question.Include(q => q.Category);
+            return View(await aplicationDBContext.ToListAsync());
         }
 
         // GET: Questions/Details/5
@@ -44,6 +35,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var question = await _context.Question
+                .Include(q => q.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -53,11 +45,12 @@ namespace ProjektSemestralny.Controllers
             return View(question);
         }
 
+        
+
         // GET: Questions/Create
         public IActionResult Create()
         {
-            ViewBag.Category = new SelectList(GetCategories().Result,"Id","Name");
-
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
@@ -66,20 +59,15 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Category")] Question question)
+        public async Task<IActionResult> Create([Bind("Id,Content,CategoryId")] Question question)
         {
-
-            string CategoryId = Request.Form["Category"].ToString();
-
-            question.Category = GetCategories().Result.Find(x => x.Id == Convert.ToInt32(CategoryId));
-
             if (ModelState.IsValid)
             {
                 _context.Add(question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", question.CategoryId);
             return View(question);
         }
 
@@ -96,7 +84,7 @@ namespace ProjektSemestralny.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", question.CategoryId);
             return View(question);
         }
 
@@ -105,7 +93,7 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,CategoryId")] Question question)
         {
             if (id != question.Id)
             {
@@ -132,6 +120,7 @@ namespace ProjektSemestralny.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", question.CategoryId);
             return View(question);
         }
 
@@ -144,6 +133,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var question = await _context.Question
+                .Include(q => q.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -176,42 +166,5 @@ namespace ProjektSemestralny.Controllers
         {
           return _context.Question.Any(e => e.Id == id);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> AddAnswer(int? id)
-        {
-            if (id == null || _context.Question == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Question.FindAsync(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-            return RedirectToAction("Create", "Answers", new {id});
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddAnswer(int id, [Bind("Id,Content")] Answer answer)
-        {
-            if (id == null || _context.Question == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Question.FindAsync(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            question.Answers.Add(answer);
-
-
-            return RedirectToAction(nameof(Index));
-        }
-
     }
 }

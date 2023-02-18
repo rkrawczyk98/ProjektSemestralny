@@ -23,7 +23,8 @@ namespace ProjektSemestralny.Controllers
         // GET: Answers
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Answer.ToListAsync());
+            var aplicationDBContext = _context.Answer.Include(a => a.Question).Include(a => a.Author);
+            return View(await aplicationDBContext.ToListAsync());
         }
 
         // GET: Answers/Details/5
@@ -35,6 +36,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var answer = await _context.Answer
+                .Include(a => a.Question).Include(a => a.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (answer == null)
             {
@@ -44,38 +46,39 @@ namespace ProjektSemestralny.Controllers
             return View(answer);
         }
 
-        // GET: Answers/Create/
-        [HttpGet]
-        [Route("answers/create/{id?}")]
+        // GET: Answers/Create
+        [HttpGet("Answers/Create/{QuestionId?}")]
         public IActionResult Create(int? QuestionId)
         {
-            return View(QuestionId);
+            ViewData["QuestionId"] = new SelectList(_context.Question, "Id", "Content");
+            if(QuestionId != null)
+            {
+                var question = _context.Question.Find(QuestionId);
+                if(question != null)
+                {
+                    ViewData["QuestionId"] = new SelectList(_context.Question, "Id", "Content",QuestionId);
+                }
+            }
+            return View();
         }
 
         // POST: Answers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("answers/create/{id?}")]
-        public async Task<IActionResult> Create([Bind("Id,Content")] Answer answer,int id)
+        public async Task<IActionResult> Create([Bind("Id,Content,QuestionId")] Answer answer)
         {
-            // Wyciaganie identyfikatora aktualnie zalogowanego użytkownika z bazy
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claims != null) answer.AuthorId = claims.Value.ToString();
-
             if (ModelState.IsValid)
             {
+                answer.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(answer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("AddAnswer", "Questions", new { id });
+                return RedirectToAction(nameof(Index));
             }
-            return View();
+            ViewData["QuestionId"] = new SelectList(_context.Question, "Id", "Content", answer.QuestionId);
+            return View(answer);
         }
-        
 
         // GET: Answers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -90,6 +93,7 @@ namespace ProjektSemestralny.Controllers
             {
                 return NotFound();
             }
+            ViewData["QuestionId"] = new SelectList(_context.Question, "Id", "Content", answer.QuestionId);
             return View(answer);
         }
 
@@ -98,15 +102,17 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content")] Answer answer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,QuestionId")] Answer answer)
         {
             if (id != answer.Id)
             {
                 return NotFound();
             }
 
+
             if (ModelState.IsValid)
             {
+                answer.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 try
                 {
                     _context.Update(answer);
@@ -125,6 +131,7 @@ namespace ProjektSemestralny.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["QuestionId"] = new SelectList(_context.Question, "Id", "Content", answer.QuestionId);
             return View(answer);
         }
 
@@ -137,6 +144,7 @@ namespace ProjektSemestralny.Controllers
             }
 
             var answer = await _context.Answer
+                .Include(a => a.Question)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (answer == null)
             {

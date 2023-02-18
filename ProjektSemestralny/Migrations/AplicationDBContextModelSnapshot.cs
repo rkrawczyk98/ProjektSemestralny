@@ -241,7 +241,7 @@ namespace ProjektSemestralny.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -251,6 +251,8 @@ namespace ProjektSemestralny.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("QuestionId");
 
@@ -352,9 +354,17 @@ namespace ProjektSemestralny.Migrations
 
             modelBuilder.Entity("ProjektSemestralny.Models.Answer", b =>
                 {
-                    b.HasOne("ProjektSemestralny.Models.Question", null)
-                        .WithMany("Answers")
+                    b.HasOne("ProjektSemestralny.Areas.Identity.Data.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("ProjektSemestralny.Models.Question", "Question")
+                        .WithMany()
                         .HasForeignKey("QuestionId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("ProjektSemestralny.Models.Question", b =>
@@ -364,11 +374,6 @@ namespace ProjektSemestralny.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ProjektSemestralny.Models.Question", b =>
-                {
-                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

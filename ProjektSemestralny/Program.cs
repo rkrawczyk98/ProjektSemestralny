@@ -48,6 +48,7 @@ using (var scope = app.Services.CreateScope())
     if (!(await roleManager.RoleExistsAsync("Admin"))) await roleManager.CreateAsync(new IdentityRole("Admin"));
     if(!(await roleManager.RoleExistsAsync("Logged"))) await roleManager.CreateAsync(new IdentityRole("Logged"));
     
+    
     if (userManager.FindByNameAsync("admin@admin.eu").Result == null)
     {
         ApplicationUser user = new ApplicationUser();
@@ -85,6 +86,7 @@ using (var scope = app.Services.CreateScope())
     }
 
 }
+    
 
 app.MapControllerRoute(
     name: "default",
