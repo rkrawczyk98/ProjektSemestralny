@@ -9,8 +9,10 @@ namespace ProjektSemestralny.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Answer")]
         public string Content { get; set; }
         public Question? Question { get; set; }
+        [Display(Name = "Question")]
         public int? QuestionId { get; set; }
         public ApplicationUser? Author { get; set; }
         public string? AuthorId { get; set; }
