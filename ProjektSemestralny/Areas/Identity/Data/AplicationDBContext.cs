@@ -18,10 +18,23 @@ public class AplicationDBContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
+        modelBuilder.Entity<Answer>(entity =>
+        {
+            // set this to "ValueGeneratedOnAdd" 
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Content);
+            entity.Property(e => e.AuthorId);
+        });
+
         base.OnModelCreating(modelBuilder);
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
+        modelBuilder.Entity<Category>(Entity =>
+        {
+            Entity.Property(e => e.Id).ValueGeneratedOnAdd();
+        });
     }
 
     private class ApplicationUserEntityConfiguration :

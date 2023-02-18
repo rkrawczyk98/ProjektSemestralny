@@ -14,12 +14,13 @@ builder.Services.AddDbContext<AplicationDBContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AplicationDBContext>();
 
+//builder.Services.AddScoped<QuestionsController>();
+//builder.Services.AddScoped<AnswersController>(); 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -43,7 +44,8 @@ using (var scope = app.Services.CreateScope())
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-    if(!(await roleManager.RoleExistsAsync("Admin"))) await roleManager.CreateAsync(new IdentityRole("Admin"));
+
+    if (!(await roleManager.RoleExistsAsync("Admin"))) await roleManager.CreateAsync(new IdentityRole("Admin"));
     if(!(await roleManager.RoleExistsAsync("Logged"))) await roleManager.CreateAsync(new IdentityRole("Logged"));
     
     if (userManager.FindByNameAsync("admin@admin.eu").Result == null)

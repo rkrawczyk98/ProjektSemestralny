@@ -44,18 +44,22 @@ namespace ProjektSemestralny.Controllers
             return View(answer);
         }
 
-        // GET: Answers/Create
-        public IActionResult Create()
+        // GET: Answers/Create/
+        [HttpGet]
+        [Route("answers/create/{id?}")]
+        public IActionResult Create(int? QuestionId)
         {
-            return View();
+            return View(QuestionId);
         }
 
         // POST: Answers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content")] Answer answer)
+        [Route("answers/create/{id?}")]
+        public async Task<IActionResult> Create([Bind("Id,Content")] Answer answer,int id)
         {
             // Wyciaganie identyfikatora aktualnie zalogowanego użytkownika z bazy
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -67,10 +71,11 @@ namespace ProjektSemestralny.Controllers
             {
                 _context.Add(answer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AddAnswer", "Questions", new { id });
             }
-            return View(answer);
+            return View();
         }
+        
 
         // GET: Answers/Edit/5
         public async Task<IActionResult> Edit(int? id)
