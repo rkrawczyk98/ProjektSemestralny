@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create answer</h1>
 
-<h4>Answer</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,15 +20,13 @@
                 <label asp-for="QuestionId" class="control-label"></label>
                 <select asp-for="QuestionId" class ="form-control" asp-items="ViewBag.QuestionId"></select>
             </div>
+            <hr />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-info btn-lg" />
+                <input type="button" onclick="location.href='@Url.Action("Index", "Answers")'" value="Go back to list" class="btn btn-info btn-lg" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
