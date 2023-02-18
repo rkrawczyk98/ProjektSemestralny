@@ -25,6 +25,7 @@
 </div>
 <hr />
 <div>
+    <a asp-controller="Answers" asp-action="Create" asp-route-QuestionId="@Model?.Id" class="btn btn-primary">Add answer</a> |
     <a asp-action="Edit" asp-route-id="@Model?.Id"><button class="btn btn-info btn-lg">Edit</button></a>
     <input type="button" onclick="location.href='@Url.Action("Index", "Questions")'" value="Go back to list" class="btn btn-info btn-lg" />
 </div>
