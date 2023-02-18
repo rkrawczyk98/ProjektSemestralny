@@ -6,8 +6,10 @@ namespace ProjektSemestralny.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Question")]
         public string Content { get; set; }
         //public List<Answer>? Answers { get; set; }
+        [Display(Name ="Category")]
         public int? CategoryId { get; set; } 
         public Category? Category { get; set; }
     }
