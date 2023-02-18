@@ -12,8 +12,8 @@ using ProjektSemestralny.Areas.Identity.Data;
 namespace ProjektSemestralny.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    [Migration("20230218172714_initial")]
-    partial class initial
+    [Migration("20230218183747_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
