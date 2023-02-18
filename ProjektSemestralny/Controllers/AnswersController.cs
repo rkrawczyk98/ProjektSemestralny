@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Answers/Details/5
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Answer == null)
@@ -47,6 +50,7 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Answers/Create
+        [Authorize(Roles = "Logged,Admin")]
         [HttpGet("Answers/Create/{QuestionId?}")]
         public IActionResult Create(int? QuestionId)
         {
@@ -67,6 +71,7 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> Create([Bind("Content,QuestionId")] Answer answer)
         {
             if (ModelState.IsValid)
@@ -81,6 +86,7 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Answers/Edit/5
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Answer == null)
@@ -102,6 +108,7 @@ namespace ProjektSemestralny.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Content,QuestionId")] Answer answer)
         {
             if (id != answer.Id)
@@ -136,6 +143,7 @@ namespace ProjektSemestralny.Controllers
         }
 
         // GET: Answers/Delete/5
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Answer == null)
@@ -157,6 +165,7 @@ namespace ProjektSemestralny.Controllers
         // POST: Answers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Logged,Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Answer == null)
@@ -173,6 +182,7 @@ namespace ProjektSemestralny.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Logged,Admin")]
         private bool AnswerExists(int id)
         {
           return _context.Answer.Any(e => e.Id == id);
